@@ -57,8 +57,8 @@ const state = [
 
 function generateNotesList(list) {
   const tableData = list.map((value) => {
-    if(value.isActive){
-        return `<tr>
+    if (value.isActive) {
+      return `<tr>
                 <td>${value.name}</td>
                 <td>${value.creationDate}</td>
                 <td>${value.category}</td>
@@ -71,23 +71,58 @@ function generateNotesList(list) {
   tableBody.innerHTML = tableData;
 }
 function generateArchivedList(list) {
-    let filtered = list.filter(note => !note.isActive)
-    let archieved = [
-        filtered.filter(note => note.category === 'Task'),
-        filtered.filter(note => note.category === 'Quote'),
-        filtered.filter(note => note.category === 'Idea'),
-        filtered.filter(note => note.category === 'Random Thought')
-      ]; 
-    console.log(archieved);
-    const tableData = archieved.filter( el => el.length > 0)
-    .map(el => {
-        return `<tr>
+  let filtered = list.filter((note) => !note.isActive);
+  let archieved = [
+    filtered.filter((note) => note.category === "Task"),
+    filtered.filter((note) => note.category === "Quote"),
+    filtered.filter((note) => note.category === "Idea"),
+    filtered.filter((note) => note.category === "Random Thought"),
+  ];
+  const tableData = archieved
+    .filter((el) => el.length > 0)
+    .map((el) => {
+      return `<tr>
                     <td>${el[0].category}</td>
                     <td>${el.length}</td>
-                </tr>`
-    })
-    const tableBody = document.getElementById("archList");
-    tableBody.innerHTML = tableData;
+                </tr>`;
+    });
+  const tableBody = document.getElementById("archList");
+  tableBody.innerHTML = tableData;
 }
 generateNotesList(state);
-generateArchivedList(state)
+generateArchivedList(state);
+
+
+// MODAL WINDOW
+
+// Get the modal
+let modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+let btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+let span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+////
+////Adding note functionality
+let addBtn = document.getElementById('submitBTN')
+addBtn.addEventListener('click', (e) => {
+    
+})
