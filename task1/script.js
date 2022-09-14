@@ -64,6 +64,17 @@ function generateNotesList(list) {
                 <td>${value.category}</td>
                 <td>${value.content}</td>
                 <td>${value.dates}</td>
+                <td>
+                  <button class='delete' onclick="remove(${value.id})">
+                    <img src='assets/dlt.png' alt='delete'>
+                  </button>
+                  <button id='edit'>
+                    <img src='assets/edit.png' alt='edit'>
+                  </button>
+                  <button class='arch' onclick="archieve(${value.id})">
+                    <img src='assets/arch.png' alt='archieve'>
+                  </button>
+                </td>
             </tr>`;
     }
   });
@@ -138,3 +149,19 @@ addBtn.addEventListener('click', (e) => {
     modal.style.display = "none";
     generateNotesList(state);
 })
+
+///
+/// DELETE El
+function remove(id) {
+  let newState = state.filter(obj => obj.id !== id)
+  generateNotesList(newState)
+}
+
+//
+// ARCHIEVATE El
+function archieve(id) {
+  let newState = state.filter(obj => obj.id === id)
+  newState[0].isActive = false
+  generateArchivedList(newState)
+  generateNotesList(newState)
+}
