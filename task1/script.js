@@ -120,9 +120,21 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
 ////
 ////Adding note functionality
 let addBtn = document.getElementById('submitBTN')
 addBtn.addEventListener('click', (e) => {
-    
+    e.preventDefault();
+    let note = {}
+    note.id = Math.floor(Math.random() * 100)
+    note.name = document.getElementById("FormControlInput1").value;
+    note.creationDate = document.getElementById("FormControlInput2").value;
+    note.category = document.getElementById("FormControlSelect").value;
+    note.content = document.getElementById("FormControlInput3").value;
+    note.dates = document.getElementById("FormControlInput4").value ? document.getElementById("FormControlInput4").value : '';
+    note.isActive = true;
+    state.push(note)
+    modal.style.display = "none";
+    generateNotesList(state);
 })
