@@ -31,12 +31,13 @@
     </table>
     <button id='myBtn' type="button" class="btn btn-dark">ADD</button>
 
+    
     <div id="myModal" class="modal">
 
         <!-- Modal content -->
         <div class="modal-content">
           <span class="close">&times;</span>
-          <form class="row g-3">
+          <form  id="form" class="row g-3">
             <div class="mb-3">
                 <label for="FormControlInput1" class="form-label">Note Text</label>
                 <input required type="text" class="form-control" id="FormControlInput1" placeholder="Note Text">
@@ -63,6 +64,7 @@
             </div>
             <div class="col-auto">
               <button id="submitBTN" type="submit" class="btn btn-primary mb-3">Create Note</button>
+              <button id="submitEdit" type="submit" class="btn btn-primary mb-3">Edit</button>
             </div>
           </form>
         </div>

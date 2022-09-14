@@ -1,4 +1,4 @@
-const state = [
+let state = [
   {
     id: "1",
     name: "Shopping List",
@@ -24,7 +24,7 @@ const state = [
     category: "Idea",
     content: "Tomatoes, bread",
     dates: "",
-    isActive: true,
+    isActive: false,
   },
   {
     id: "4",
@@ -42,7 +42,7 @@ const state = [
     category: "Idea",
     content: "Invent someth",
     dates: "10/5/2021",
-    isActive: true,
+    isActive: false,
   },
   {
     id: "6",
@@ -68,7 +68,7 @@ function generateNotesList(list) {
                   <button class='delete' onclick="remove(${value.id})">
                     <img src='assets/dlt.png' alt='delete'>
                   </button>
-                  <button id='edit'>
+                  <button id='edit' onclick="edit(${value.id})">
                     <img src='assets/edit.png' alt='edit'>
                   </button>
                   <button class='arch' onclick="archieve(${value.id})">
@@ -103,7 +103,6 @@ function generateArchivedList(list) {
 generateNotesList(state);
 generateArchivedList(state);
 
-
 // MODAL WINDOW
 
 // Get the modal
@@ -115,53 +114,90 @@ let btn = document.getElementById("myBtn");
 // Get the <span> element that closes the modal
 let span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
+// When the user clicks the button, open the modal
+btn.onclick = function () {
   modal.style.display = "block";
-}
+};
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+span.onclick = function () {
   modal.style.display = "none";
-}
+};
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
-}
+};
 
 ////
 ////Adding note functionality
-let addBtn = document.getElementById('submitBTN')
-addBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    let note = {}
-    note.id = Math.floor(Math.random() * 100)
-    note.name = document.getElementById("FormControlInput1").value;
-    note.creationDate = document.getElementById("FormControlInput2").value;
-    note.category = document.getElementById("FormControlSelect").value;
-    note.content = document.getElementById("FormControlInput3").value;
-    note.dates = document.getElementById("FormControlInput4").value ? document.getElementById("FormControlInput4").value : '';
-    note.isActive = true;
-    state.push(note)
-    modal.style.display = "none";
-    generateNotesList(state);
-})
+let addBtn = document.getElementById("submitBTN");
+let EditBtn = document.getElementById("submitEdit");
+EditBtn.style.display = "none";
+addBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  let note = {};
+  note.id = Math.floor(Math.random() * 100);
+  note.name = document.getElementById("FormControlInput1").value;
+  note.creationDate = document.getElementById("FormControlInput2").value;
+  note.category = document.getElementById("FormControlSelect").value;
+  note.content = document.getElementById("FormControlInput3").value;
+  note.dates = document.getElementById("FormControlInput4").value
+    ? document.getElementById("FormControlInput4").value
+    : "";
+  note.isActive = true;
+  state.push(note);
+  modal.style.display = "none";
+  document.forms["form"].reset();
+  generateNotesList(state);
+});
 
 ///
 /// DELETE El
 function remove(id) {
-  let newState = state.filter(obj => obj.id !== id)
-  generateNotesList(newState)
+  state = state.filter((obj) => obj.id !== id);
+  generateNotesList(state);
 }
 
 //
 // ARCHIEVATE El
 function archieve(id) {
-  let newState = state.filter(obj => obj.id === id)
-  newState[0].isActive = false
-  generateArchivedList(newState)
-  generateNotesList(newState)
+  let objState = state.filter((obj) => obj.id === id);
+  state = state.filter((obj) => obj.id !== id);
+  objState[0].isActive = false;
+  state.push(objState[0]);
+  generateArchivedList(state);
+  generateNotesList(state);
+}
+///
+///editting el
+function edit(id) {
+  modal.style.display = "block";
+  let objState = state.filter((obj) => obj.id === id);
+  state = state.filter((obj) => obj.id !== id);
+  document.getElementById("FormControlInput1").value = objState[0].name;
+  document.getElementById("FormControlInput2").value = objState[0].creationDate;
+  document.getElementById("FormControlSelect").value = objState[0].category;
+  document.getElementById("FormControlInput3").value = objState[0].content;
+  document.getElementById("FormControlInput4").value = objState[0].dates;
+  EditBtn.style.display = "none";
+  addBtn.innerText = "Edit";
+  EditBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    let note = {};
+    note.id = objState[0].id;
+    note.name = document.getElementById("FormControlInput1").value;
+    note.creationDate = document.getElementById("FormControlInput2").value;
+    note.category = document.getElementById("FormControlSelect").value;
+    note.content = document.getElementById("FormControlInput3").value;
+    note.dates = document.getElementById("FormControlInput4").value
+      ? document.getElementById("FormControlInput4").value
+      : "";
+    note.isActive = true;
+    state.push(note);
+    modal.style.display = "none";
+    document.forms["form"].reset();
+  });
 }
