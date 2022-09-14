@@ -93,16 +93,35 @@ function generateArchivedList(list) {
     .filter((el) => el.length > 0)
     .map((el) => {
       return `<tr>
-                    <td>${el[0].category}</td>
-                    <td>${el.length}</td>
-                </tr>`;
+                <table>
+                  <thead>
+                    <td><h3>${el[0].category}</h3></td>
+                    <td><h3>${el.length}</h3></td>
+                  </thead>
+                    `+el.map(one =>`
+                      <tbody>
+                        <td>${one.name}</td>
+                        <td>${one.content}</td>
+                        <td>
+                          <button>
+                            <img onclick="unarchive(${one.id})" src='assets/arch.png' alt='unarch'>
+                          </button>
+                        </td>
+                      </tbody>
+                    `) + ` 
+                </table>      
+              </tr>`;
     });
   const tableBody = document.getElementById("archList");
   tableBody.innerHTML = tableData;
 }
-generateNotesList(state);
-generateArchivedList(state);
-
+// generateNotesList(state);
+// generateArchivedList(state);
+function start() {
+  generateNotesList(state);
+  generateArchivedList(state);
+}
+start()
 // MODAL WINDOW
 
 // Get the modal
@@ -157,26 +176,35 @@ addBtn.addEventListener("click", (e) => {
 ///
 /// DELETE El
 function remove(id) {
-  state = state.filter((obj) => obj.id !== id);
+  state = state.filter((obj) => obj.id != id);
   generateNotesList(state);
 }
 
 //
 // ARCHIEVATE El
 function archieve(id) {
-  let objState = state.filter((obj) => obj.id === id);
-  state = state.filter((obj) => obj.id !== id);
+  let objState = state.filter((obj) => obj.id == id);
+  state = state.filter((obj) => obj.id != id);
   objState[0].isActive = false;
   state.push(objState[0]);
   generateArchivedList(state);
   generateNotesList(state);
 }
+function unarchive(id) {
+  let objState = state.filter((obj) => obj.id == id);
+  objState[0].isActive = true;
+  state = state.filter((obj) => obj.id != id);
+  state.push(objState[0]);
+  generateArchivedList(state);
+  generateNotesList(state);
+}
+
 ///
 ///editting el
 function edit(id) {
   modal.style.display = "block";
-  let objState = state.filter((obj) => obj.id === id);
-  state = state.filter((obj) => obj.id !== id);
+  let objState = state.filter((obj) => obj.id == id);
+  state = state.filter((obj) => obj.id != id);
   document.getElementById("FormControlInput1").value = objState[0].name;
   document.getElementById("FormControlInput2").value = objState[0].creationDate;
   document.getElementById("FormControlSelect").value = objState[0].category;
